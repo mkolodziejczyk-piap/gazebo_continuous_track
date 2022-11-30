@@ -69,15 +69,15 @@ private:
 
     // [joint]
     sprocket.joint = _model->GetJoint(_sdf->GetElement("joint")->Get< std::string >());
-    GZ_ASSERT(sprocket.joint,
-              "Cannot find a joint with the value of [sprocket]::[joint] element in sdf");
-    GZ_ASSERT(sprocket.joint->HasType(physics::Joint::HINGE_JOINT),
-              "[sprocket]::[joint] must be a rotatinal joint");
+    // GZ_ASSERT(sprocket.joint,
+    //           "Cannot find a joint with the value of [sprocket]::[joint] element in sdf");
+    // GZ_ASSERT(sprocket.joint->HasType(physics::Joint::HINGE_JOINT),
+    //           "[sprocket]::[joint] must be a rotatinal joint");
 
     // [pitch_diameter]
     sprocket.pitch_diameter = _sdf->GetElement("pitch_diameter")->Get< double >();
-    GZ_ASSERT(sprocket.pitch_diameter > 0.,
-              "[sprocket]::[pitch_diameter] must be a positive real number");
+    // GZ_ASSERT(sprocket.pitch_diameter > 0.,
+    //           "[sprocket]::[pitch_diameter] must be a positive real number");
 
     return sprocket;
   }
@@ -94,16 +94,17 @@ private:
 
       // []::[joint]
       segment.joint = _model->GetJoint(segment_elem->GetElement("joint")->Get< std::string >());
-      GZ_ASSERT(segment.joint, "Cannot find a joint with the value of "
-                               "[trajectory]::[segment]::[joint] element in sdf");
-      GZ_ASSERT(segment.joint->HasType(physics::Joint::HINGE_JOINT) ||
-                    segment.joint->HasType(physics::Joint::SLIDER_JOINT),
-                "[trajectory]::[segment]::[joint] must be a rotatinal or translational joint");
+      // GZ_DEBUG(segment_elem->GetElement("joint")->GetName());
+      // GZ_ASSERT(segment.joint, "Cannot find a joint with the value of "
+      //                          "[trajectory]::[segment]::[joint] element in sdf");
+      // GZ_ASSERT(segment.joint->HasType(physics::Joint::HINGE_JOINT) ||
+      //               segment.joint->HasType(physics::Joint::SLIDER_JOINT),
+      //           "[trajectory]::[segment]::[joint] must be a rotatinal or translational joint");
 
       // []::[end_position]
       segment.end_position = segment_elem->GetElement("end_position")->Get< double >();
-      GZ_ASSERT(segment.end_position > 0.,
-                "[trajectory]::[segment]::[end_position] must be a positive real number");
+      // GZ_ASSERT(segment.end_position > 0.,
+      //           "[trajectory]::[segment]::[end_position] must be a positive real number");
 
       trajectory.segments.push_back(segment);
     }
@@ -118,8 +119,8 @@ private:
 
     // [elements_per_round]
     pattern.elements_per_round = _sdf->GetElement("elements_per_round")->Get< std::size_t >();
-    GZ_ASSERT(pattern.elements_per_round > 0,
-              "[pattern]::[elements_per_round] must be positive intger");
+    // GZ_ASSERT(pattern.elements_per_round > 0,
+    //           "[pattern]::[elements_per_round] must be positive intger");
 
     // [element] (multiple, +)
     for (sdf::ElementPtr element_elem = _sdf->GetElement("element"); element_elem;
@@ -156,10 +157,13 @@ private:
   // the initialied sdf may look empty but have a format information.
   static sdf::ElementPtr LoadPluginFormat() {
     const sdf::ElementPtr fmt(new sdf::Element());
-    GZ_ASSERT(sdf::initFile(ros::package::getPath("gazebo_continuous_track") +
+    // GZ_ASSERT(sdf::initFile(ros::package::getPath("gazebo_continuous_track") +
+    //                             "/sdf/continuous_track_plugin.sdf",
+    //                         fmt),
+    //           "Cannot initialize sdf by continuous_track_plugin.sdf");
+    sdf::initFile(ros::package::getPath("gazebo_continuous_track") +
                                 "/sdf/continuous_track_plugin.sdf",
-                            fmt),
-              "Cannot initialize sdf by continuous_track_plugin.sdf");
+                            fmt);
     return fmt;
   }
 
@@ -169,9 +173,10 @@ private:
   static sdf::ElementPtr ToPluginSDF(const sdf::ElementPtr &_sdf) {
     static const sdf::ElementPtr fmt(LoadPluginFormat());
     const sdf::ElementPtr dst(fmt->Clone());
-    GZ_ASSERT(
-        sdf::readString("<sdf version='" SDF_VERSION "'>" + _sdf->ToString("") + "</sdf>", dst),
-        "The given sdf does not match ContinuousTrack plugin format");
+    // GZ_ASSERT(
+    //     sdf::readString("<sdf version='" SDF_VERSION "'>" + _sdf->ToString("") + "</sdf>", dst),
+    //     "The given sdf does not match ContinuousTrack plugin format");
+        sdf::readString("<sdf version='" SDF_VERSION "'>" + _sdf->ToString("") + "</sdf>", dst);
     return dst;
   }
 };
